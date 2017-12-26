@@ -170,7 +170,7 @@ namespace MarkdownEdit.Models
                     lineEnd,
                     editor.EditBox.Document.Lines.Select(line => editor.EditBox.Document.GetText(line).Trim('\r', '\n')));
 
-                File.WriteAllText(editor.FileName, text);
+                File.WriteAllText(editor.FileName, text, Encoding.UTF8);
                 RecentFilesDialog.UpdateRecentFiles(editor.FileName, editor.EditBox.SelectionStart);
                 Settings.Default.LastOpenFile = editor.FileName.AddOffsetToFileName(editor.EditBox.SelectionStart);
                 editor.IsModified = false;
