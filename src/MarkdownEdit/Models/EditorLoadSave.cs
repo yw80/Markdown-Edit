@@ -14,8 +14,7 @@ namespace MarkdownEdit.Models
     {
         Markdown,
         Html,
-        Word,
-        Pdf
+        Word
     }
 
     public static class EditorLoadSave
@@ -115,12 +114,10 @@ namespace MarkdownEdit.Models
         {
             const int markdown = 1;
             const int html = 2;
-            const int pdf = 3;
             const int docx = 4;
 
             var filterIndex = markdown;
             if (defaultFilter == "html" || defaultFilter == "html-with-template") filterIndex = html;
-            if (defaultFilter == "pdf") filterIndex = pdf;
             if (defaultFilter == "docx") filterIndex = docx;
 
             var dialog = new SaveFileDialog
@@ -131,7 +128,6 @@ namespace MarkdownEdit.Models
                 FileName = Markdown.SuggestFilenameFromTitle(editor.EditBox.Text),
                 Filter = "Markdown files (*.md)|*.md|"
                          + "HTML files (*.html)|*.html|"
-                         + "PDF files (*.pdf)|*.pdf|"
                          + "Docx files (*.docx)|*.docx|"
                          + "All files (*.*)|*.*"
             };
@@ -139,7 +135,6 @@ namespace MarkdownEdit.Models
 
             var filename = dialog.FileNames[0];
             if (dialog.FilterIndex == html) return SaveAsHtml(editor.Text, filename, "html-with-template");
-            if (dialog.FilterIndex == pdf) return SaveAsPdf(editor.Text, filename);
             if (dialog.FilterIndex == docx) return SaveAsDocx(editor.Text, filename);
 
             var currentFileName = editor.FileName;
@@ -233,23 +228,6 @@ namespace MarkdownEdit.Models
                 var html = Markdown.ToHtml(Markdown.RemoveYamlFrontMatter(markdown));
                 if (filter == "html-with-template") html = UserTemplate.InsertContent(html);
                 File.WriteAllText(filename, html);
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-                Notify.Alert(ex.Message);
-                return false;
-            }
-        }
-
-        private static bool SaveAsPdf(string markdown, string filename)
-        {
-            try
-            {
-                var html = UserTemplate.InsertContent(Markdown.ToHtml(Markdown.RemoveYamlFrontMatter(markdown)));
-                var pdf = Markdown.HtmlToPdf(html);
-                File.WriteAllBytes(filename, pdf);
                 return true;
 
             }

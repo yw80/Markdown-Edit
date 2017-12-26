@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MarkdownEdit.MarkdownConverters;
 using MarkdownEdit.Properties;
-using NReco.PdfGenerator;
 using static System.String;
 
 namespace MarkdownEdit.Models
@@ -71,17 +70,6 @@ namespace MarkdownEdit.Models
 
         public static string ToMicrosoftWord(string markdown, string path) =>
             Pandoc(ResolveImageUrls(ToHtml(markdown)), $"-f html -t docx -o \"{path}\"");
-
-        public static byte[] HtmlToPdf(string html)
-        {
-            var converter = new HtmlToPdfConverter
-            {
-                CustomWkHtmlPageArgs = " --no-stop-slow-scripts" +
-                                       " --javascript-delay 5000" +
-                                       " --disable-smart-shrinking"
-            };
-            return converter.GeneratePdf(ResolveImageUrls(html));
-        }
 
         public static string Pandoc(string text, string args)
         {

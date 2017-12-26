@@ -124,9 +124,6 @@
       <DependentUpon>Lib\Hunspellx86.dll</DependentUpon>
       <DependentUpon>Lib\Hunspellx64.dll</DependentUpon>
     </Reference>
-    <Reference Include="NReco.PdfGenerator, Version=1.1.15.0, Culture=neutral, PublicKeyToken=231663d50a41b451, processorArchitecture=MSIL">
-      <HintPath>..\packages\NReco.PdfGenerator.1.1.15\lib\net20\NReco.PdfGenerator.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Drawing" />
