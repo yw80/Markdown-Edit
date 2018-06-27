@@ -65,12 +65,6 @@ namespace MarkdownEdit.Models
                 : CustomMarkdownConverter;
         }
 
-        public static string FromMicrosoftWord(string path)
-            => Pandoc(null, $"-f docx -t {PandocMarkdownFormat} \"{path}\"");
-
-        public static string ToMicrosoftWord(string markdown, string path) =>
-            Pandoc(ResolveImageUrls(ToHtml(markdown)), $"-f html -t docx -o \"{path}\"");
-
         public static string Pandoc(string text, string args)
         {
             var pandoc = ProcessStartInfo("pandoc.exe", args, text != null);

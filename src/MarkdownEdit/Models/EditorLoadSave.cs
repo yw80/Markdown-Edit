@@ -38,16 +38,6 @@ namespace MarkdownEdit.Models
                 var offset = ConvertToOffset(parts.Length == 2 ? parts[1] : "0");
                 var pathExtension = Path.GetExtension(filename);
 
-                var isWordDoc = pathExtension.Equals(".docx", StringComparison.OrdinalIgnoreCase);
-
-                if (isWordDoc)
-                {
-                    NewFile(editor);
-                    editor.EditBox.Text = Markdown.FromMicrosoftWord(filename);
-                    editor.EditBox.Encoding = Encoding.UTF8;
-                    return true;
-                }
-
                 var isHtmlFile = pathExtension.Equals(".html", StringComparison.OrdinalIgnoreCase)
                                  || pathExtension.Equals(".htm", StringComparison.OrdinalIgnoreCase);
 
@@ -114,11 +104,9 @@ namespace MarkdownEdit.Models
         {
             const int markdown = 1;
             const int html = 2;
-            const int docx = 4;
 
             var filterIndex = markdown;
             if (defaultFilter == "html" || defaultFilter == "html-with-template") filterIndex = html;
-            if (defaultFilter == "docx") filterIndex = docx;
 
             var dialog = new SaveFileDialog
             {
@@ -128,14 +116,12 @@ namespace MarkdownEdit.Models
                 FileName = Markdown.SuggestFilenameFromTitle(editor.EditBox.Text),
                 Filter = "Markdown files (*.md)|*.md|"
                          + "HTML files (*.html)|*.html|"
-                         + "Docx files (*.docx)|*.docx|"
                          + "All files (*.*)|*.*"
             };
             if (dialog.ShowDialog() == false) return false;
 
             var filename = dialog.FileNames[0];
             if (dialog.FilterIndex == html) return SaveAsHtml(editor.Text, filename, "html-with-template");
-            if (dialog.FilterIndex == docx) return SaveAsDocx(editor.Text, filename);
 
             var currentFileName = editor.FileName;
             editor.FileName = filename;
@@ -185,7 +171,6 @@ namespace MarkdownEdit.Models
             {
                 const string fileFilter =
                     "Markdown files (*.md)|*.md|"
-                    + "Microsoft Word files (*.docx)|*.docx|"
                     + "HTML files (*.html)|*.html|"
                     + "All files (*.*)|*.*";
 
@@ -228,21 +213,6 @@ namespace MarkdownEdit.Models
                 var html = Markdown.ToHtml(Markdown.RemoveYamlFrontMatter(markdown));
                 if (filter == "html-with-template") html = UserTemplate.InsertContent(html);
                 File.WriteAllText(filename, html);
-                return true;
-
-            }
-            catch (Exception ex)
-            {
-                Notify.Alert(ex.Message);
-                return false;
-            }
-        }
-
-        private static bool SaveAsDocx(string markdown, string filename)
-        {
-            try
-            {
-                Markdown.ToMicrosoftWord(Markdown.RemoveYamlFrontMatter(markdown), filename);
                 return true;
 
             }
