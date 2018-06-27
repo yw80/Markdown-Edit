@@ -16,15 +16,7 @@ namespace MarkdownEdit.Commands
         private static void Execute(object sender, ExecutedRoutedEventArgs e)
         {
             var editor = ((MainWindow)sender).Editor;
-            try
-            {
-                editor.ConvertFromHtml = true;
-                editor.EditBox.Paste();
-            }
-            finally
-            {
-                editor.ConvertFromHtml = false;
-            }
+			editor.EditBox.Paste();
         }
 
         private static void CanExecute(object sender, CanExecuteRoutedEventArgs e)

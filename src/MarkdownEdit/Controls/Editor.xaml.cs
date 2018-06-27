@@ -79,7 +79,6 @@ namespace MarkdownEdit.Controls
 
         public EventHandler TextChanged;
         public EventHandler<ThemeChangedEventArgs> ThemeChanged;
-        public bool ConvertFromHtml;
 
         public Editor()
         {
@@ -362,14 +361,6 @@ namespace MarkdownEdit.Controls
             if (RemoveSpecialCharacters)
             {
                 text = text.ReplaceSmartChars();
-            }
-            else if (ConvertFromHtml)
-            {
-                if (pasteEventArgs.SourceDataObject.GetFormats(false).Contains(DataFormats.Html))
-                {
-                    text = (string)pasteEventArgs.SourceDataObject.GetData(DataFormats.Html);
-                }
-                text = Markdown.FromHtmlText(text);
             }
             else if (Uri.IsWellFormedUriString(text, UriKind.Absolute)
                      && PositionSafeForSmartLink(AbstractSyntaxTree, EditBox.SelectionStart, EditBox.SelectionLength))

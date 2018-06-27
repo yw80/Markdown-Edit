@@ -53,8 +53,6 @@ namespace MarkdownEdit.Models
         public static string Unwrap(string text)
             => Reformat(text, "--wrap=none --atx-headers");
 
-        public static string FromHtmlText(string text) => Pandoc(text, $"-f html -t {PandocMarkdownFormat} --wrap=none");
-
         private static IMarkdownConverter GetMarkdownConverter()
         {
             return IsNullOrWhiteSpace(App.UserSettings.CustomMarkdownConverter)
