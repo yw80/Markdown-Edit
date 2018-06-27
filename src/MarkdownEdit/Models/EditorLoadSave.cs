@@ -38,17 +38,6 @@ namespace MarkdownEdit.Models
                 var offset = ConvertToOffset(parts.Length == 2 ? parts[1] : "0");
                 var pathExtension = Path.GetExtension(filename);
 
-                var isHtmlFile = pathExtension.Equals(".html", StringComparison.OrdinalIgnoreCase)
-                                 || pathExtension.Equals(".htm", StringComparison.OrdinalIgnoreCase);
-
-                if (isHtmlFile)
-                {
-                    NewFile(editor);
-                    editor.EditBox.Text = Markdown.FromHtml(filename);
-                    editor.EditBox.Encoding = Encoding.UTF8;
-                    return true;
-                }
-
                 var editorEncoding = App.UserSettings.EditorEncoding;
 
                 var encoding = MyEncodingInfo.IsAutoDetectEncoding(editorEncoding)
@@ -171,7 +160,6 @@ namespace MarkdownEdit.Models
             {
                 const string fileFilter =
                     "Markdown files (*.md)|*.md|"
-                    + "HTML files (*.html)|*.html|"
                     + "All files (*.*)|*.*";
 
                 var dialog = new OpenFileDialog {Filter = fileFilter};
